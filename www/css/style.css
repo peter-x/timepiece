@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Digital';
+        src: url('../fonts/Digital.ttf') format('TrueType');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#timepieceTemplate {
+    display: none;
+}
+.time {
+  color: #428bca;
+  font-family: "Digital";
+  font-size: 55px;
+  font-weight: normal;
+}
