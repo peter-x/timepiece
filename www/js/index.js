@@ -101,12 +101,15 @@ TimepieceRenderer.prototype._updateName = function() {
 TimepieceRenderer.prototype._updateTime = function() {
     var milliSeconds = this.timepiece.getTotalTime();
     var seconds = milliSeconds / 1000;
-    var str = sprintf('%02d:%02d:%02d.%d',
+    $('.time', this.container)
+        .empty()
+        .append($('<span/>').text(
+              sprintf('%02d:%02d:%02d',
                       Math.floor(seconds / 3600),
                       Math.floor((seconds / 60) % 60),
-                      Math.floor(seconds % 60),
-                      Math.floor((milliSeconds / 100) % 10));
-    $('.time', this.container).html(str);
+                      Math.floor(seconds % 60))))
+        .append($('<span class="deciseconds"/>').text(
+              sprintf('.%d', Math.floor((milliSeconds / 100) % 10))));
 }
 TimepieceRenderer.prototype._updateDetailsList = function() {
     function formatTime(timestamp) {
