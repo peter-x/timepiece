@@ -75,7 +75,7 @@ function TimepieceRenderer(timepiece) {
             that._updateName();
         }
     });
-    $('.close', this.container).click(function() {
+    $('.buttonRemove', this.container).click(function() {
         // TODO unregister interval
         // TODO remove from UserInterface
         that.container.slideUp('fast');
