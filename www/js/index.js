@@ -68,6 +68,13 @@ function TimepieceRenderer(timepiece) {
     this.container = $('#timepieceTemplate').clone();
     this.container.removeAttr('id');
     this.container.insertAfter($('#firstRow'));
+    $('.timepieceName', this.container).click(function() {
+        var name = window.prompt('Rename', that.timepiece.getName());
+        if (name !== null) {
+            that.timepiece.setName(name);
+            that._updateName();
+        }
+    });
     $('.close', this.container).click(function() {
         // TODO unregister interval
         // TODO remove from UserInterface
