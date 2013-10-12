@@ -71,7 +71,7 @@ function TimepieceRenderer(timepiece) {
     $('.close', this.container).click(function() {
         // TODO unregister interval
         // TODO remove from UserInterface
-        that.container.slideUp('slow');
+        that.container.slideUp('fast');
         // TODO destroy afterwards
     });
     $('.buttonStartStop', this.container).click(function() {
@@ -84,7 +84,7 @@ function TimepieceRenderer(timepiece) {
         that._updateTime();
     }, 100);
     this.container.hide();
-    this.container.slideDown('slow');
+    this.container.slideDown('fast');
     this._updateTime();
     this._updateName();
     this._updateDetailsList();
@@ -132,7 +132,7 @@ TimepieceRenderer.prototype._updateDetailsList = function() {
     }
 }
 TimepieceRenderer.prototype._toggleDetailsClicked = function() {
-    $('.detailsRow', this.container).slideToggle('slow');
+    $('.detailsRow', this.container).slideToggle('fast');
 }
 
 /**
