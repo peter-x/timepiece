@@ -8,6 +8,10 @@
 #timepieceTemplate {
     display: none;
 }
+.timepieceName {
+  font-variant: small-caps;
+  font-weight: bold;
+}
 .time {
   color: #428bca;
   font-family: "Digital";
