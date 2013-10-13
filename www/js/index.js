@@ -84,11 +84,19 @@ function TimepieceRenderer(timepiece) {
         that.container.slideUp('fast');
         // TODO destroy afterwards
     });
+    $('.buttonReset', this.container).click(function() {
+        that.timepiece.reset();
+        that._updateTime();
+        that._updateDetailsList();
+        that._updateStartStopButton();
+    });
     $('.buttonStartStop', this.container).click(function() {
-        that._startStopClicked();
+        that.timepiece.toggle();
+        that._updateStartStopButton();
+        that._updateDetailsList();
     });
     $('.buttonToggleDetails', this.container).click(function() {
-        that._toggleDetailsClicked();
+        $('.detailsRow', this.container).slideToggle('fast');
     });
     this.interval = window.setInterval(function() {
         that._updateTime();
@@ -99,12 +107,10 @@ function TimepieceRenderer(timepiece) {
     this._updateName();
     this._updateDetailsList();
 }
-TimepieceRenderer.prototype._startStopClicked = function() {
-    this.timepiece.toggle();
+TimepieceRenderer.prototype._updateStartStopButton = function() {
     $('.buttonStartStop', this.container)
         .text(this.timepiece.isRunning() ? 'Pause' : 'Start')
         .button('refresh');
-    this._updateDetailsList();
 }
 TimepieceRenderer.prototype._updateName = function() {
     $('.timepieceName', this.container).text(this.timepiece.getName());
@@ -141,9 +147,6 @@ TimepieceRenderer.prototype._updateDetailsList = function() {
         }
         row.appendTo(tbody);
     }
-}
-TimepieceRenderer.prototype._toggleDetailsClicked = function() {
-    $('.detailsRow', this.container).slideToggle('fast');
 }
 
 /**
@@ -210,6 +213,9 @@ Timepiece.prototype.stop = function() {
 }
 Timepiece.prototype.toggle = function() {
     this.timestamps.push(this._getCurrentTimeMillis());
+}
+Timepiece.prototype.reset = function() {
+    this.timestamps = [];
 }
 /**
  * Returns a list of all timestamps recorded.
