@@ -20,7 +20,7 @@ var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
-        this.userInterface = new UserInterface();
+        app.userInterface = new UserInterface();
     },
     // Bind Event Listeners
     //
@@ -28,6 +28,9 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        $('body').on('pagebeforeshow', function() {
+            app.userInterface.restoreData();
+        });
     },
     // deviceready Event Handler
     //
@@ -56,8 +59,19 @@ function UserInterface() {
         that.newTimepiece();
     });
 }
+UserInterface.prototype.restoreData = function() {
+    for (var i = 0; i < window.localStorage.length; i ++) {
+        var t = Timepiece.CreateFromLocalStorage(i);
+        if (t) {
+            var ui = new TimepieceRenderer(t);
+            this.timepieces.unshift(t);
+        }
+    }
+}
 UserInterface.prototype.newTimepiece = function() {
-    var t = new Timepiece("Unnamed");
+    var id = 1 + (parseInt(window.localStorage.getItem('lastUsedID')) || 0);
+    window.localStorage.setItem('lastUsedID', id);
+    var t = new Timepiece(id, "Unnamed");
     var ui = new TimepieceRenderer(t);
     this.timepieces.unshift(t);
 }
@@ -83,6 +97,7 @@ function TimepieceRenderer(timepiece) {
         // TODO remove from UserInterface
         that.container.slideUp('fast');
         // TODO destroy afterwards
+        that.timepiece.destroy();
     });
     $('.buttonReset', this.container).click(function() {
         that.timepiece.reset();
@@ -154,9 +169,33 @@ TimepieceRenderer.prototype._updateDetailsList = function() {
  * It is possible to query the timestamps of starts and stops and retrieve the
  * overall time.
  */
-function Timepiece(name) {
+function Timepiece(id, name, _timestamps, _doNotSave) {
+    this.id = id;
     this.name = name;
-    this.timestamps = [];
+    this.timestamps = _timestamps || [];
+    if (!_doNotSave)
+        this._saveToStorage();
+}
+/**
+ * Save the current object to local storage.
+ */
+Timepiece.prototype._saveToStorage = function() {
+    window.localStorage.setItem(
+            'timepiece_' + this.id,
+                JSON.stringify({name: this.name,
+                                timestamps: this.timestamps}));
+}
+/**
+ * Factory function, create a Timepiece object from local storage.
+ */
+Timepiece.CreateFromLocalStorage = function(keyIndex) {
+    var key = window.localStorage.key(keyIndex);
+    if (!key.match(/^timepiece_[0-9]+$/))
+        return null;
+    var id = parseInt(key.substr(10));
+    var value = window.localStorage.getItem(key);
+    var data = JSON.parse(value);
+    return new Timepiece(id, data.name, data.timestamps, true);
 }
 /**
  * Returns the name of this timepiece.
@@ -169,6 +208,7 @@ Timepiece.prototype.getName = function() {
  */
 Timepiece.prototype.setName = function(name) {
     this.name = name;
+    this._saveToStorage();
 }
 /**
  * Returns the current time in milliseconds since the epoch.
@@ -213,13 +253,21 @@ Timepiece.prototype.stop = function() {
 }
 Timepiece.prototype.toggle = function() {
     this.timestamps.push(this._getCurrentTimeMillis());
+    this._saveToStorage();
 }
 Timepiece.prototype.reset = function() {
     this.timestamps = [];
+    this._saveToStorage();
 }
 /**
  * Returns a list of all timestamps recorded.
  */
 Timepiece.prototype.getTimestamps = function() {
     return this.timestamps.slice();
+}
+/**
+ * Removes this timepiece from the local storage.
+ */
+Timepiece.prototype.destroy = function() {
+    window.localStorage.removeItem('timepiece_' + this.id);
 }
