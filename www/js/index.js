@@ -67,7 +67,10 @@ function TimepieceRenderer(timepiece) {
     this.timepiece = timepiece;
     this.container = $('#timepieceTemplate').clone();
     this.container.removeAttr('id');
-    this.container.insertAfter($('#firstRow'));
+    $('#timepiecesContainer')
+        .append(this.container);
+    this.container.trigger('create');
+    $('#timepiecesContainer').listview('refresh');
     $('.timepieceName', this.container).click(function() {
         var name = window.prompt('Rename', that.timepiece.getName());
         if (name !== null) {
@@ -98,8 +101,9 @@ function TimepieceRenderer(timepiece) {
 }
 TimepieceRenderer.prototype._startStopClicked = function() {
     this.timepiece.toggle();
-    $('.buttonStartStop', this.container).text(
-            this.timepiece.isRunning() ? 'Pause' : 'Start');
+    $('.buttonStartStop', this.container)
+        .text(this.timepiece.isRunning() ? 'Pause' : 'Start')
+        .button('refresh');
     this._updateDetailsList();
 }
 TimepieceRenderer.prototype._updateName = function() {

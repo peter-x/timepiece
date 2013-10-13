@@ -11,12 +11,12 @@
 .timepieceName {
   font-variant: small-caps;
   font-weight: bold;
+  font-size: 25px;
 }
 .time {
   color: #428bca;
   font-family: "Digital";
-  font-size: 55px;
-  font-weight: normal;
+  font-size: 40px;
 }
 .time .deciseconds {
   font-size: 70%;
