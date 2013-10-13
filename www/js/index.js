@@ -110,17 +110,17 @@ TimepieceRenderer.prototype._updateName = function() {
     $('.timepieceName', this.container).text(this.timepiece.getName());
 }
 TimepieceRenderer.prototype._updateTime = function() {
-    var milliSeconds = this.timepiece.getTotalTime();
-    var seconds = milliSeconds / 1000;
-    $('.time', this.container)
-        .empty()
-        .append($('<span/>').text(
-              sprintf('%02d:%02d:%02d',
-                      Math.floor(seconds / 3600),
-                      Math.floor((seconds / 60) % 60),
-                      Math.floor(seconds % 60))))
-        .append($('<span class="deciseconds"/>').text(
-              sprintf('.%d', Math.floor((milliSeconds / 100) % 10))));
+    var seconds = Math.floor(this.timepiece.getTotalTime() / 1000);
+    if (!this.lastSeconds || seconds != this.lastSeconds) {
+        $('.time', this.container)
+            .empty()
+            .append($('<span/>').text(
+                  sprintf('%02d:%02d:%02d',
+                          Math.floor(seconds / 3600),
+                          Math.floor((seconds / 60) % 60),
+                          Math.floor(seconds % 60))));
+        this.lastSeconds = seconds;
+    }
 }
 TimepieceRenderer.prototype._updateDetailsList = function() {
     function formatTime(timestamp) {
