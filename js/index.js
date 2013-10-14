@@ -111,7 +111,7 @@ function TimepieceRenderer(timepiece) {
         that._updateDetailsList();
     });
     $('.buttonToggleDetails', this.container).click(function() {
-        $('.detailsRow', this.container).slideToggle('fast');
+        $('.detailsRow', that.container).slideToggle('fast');
     });
     this.interval = window.setInterval(function() {
         that._updateTime();
@@ -120,6 +120,7 @@ function TimepieceRenderer(timepiece) {
     this.container.slideDown('fast');
     this._updateTime();
     this._updateName();
+    this._updateStartStopButton();
     this._updateDetailsList();
 }
 TimepieceRenderer.prototype._updateStartStopButton = function() {
