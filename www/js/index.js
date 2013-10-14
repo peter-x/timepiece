@@ -111,7 +111,7 @@ function TimepieceRenderer(timepiece) {
         that._updateDetailsList();
     });
     $('.buttonToggleDetails', this.container).click(function() {
-        $('.detailsRow', this.container).slideToggle('fast');
+        $('.detailsRow', that.container).slideToggle('fast');
     });
     this.interval = window.setInterval(function() {
         that._updateTime();
