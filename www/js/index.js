@@ -120,6 +120,7 @@ function TimepieceRenderer(timepiece) {
     this.container.slideDown('fast');
     this._updateTime();
     this._updateName();
+    this._updateStartStopButton();
     this._updateDetailsList();
 }
 TimepieceRenderer.prototype._updateStartStopButton = function() {
